@@ -12,6 +12,7 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
+
   db:
     image: postgres:9.4
     volumes:
@@ -23,6 +24,7 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+
   vote:
     image: bretfisher/examplevotingapp_vote
     ports:
@@ -37,6 +39,7 @@ services:
         parallelism: 2
       restart_policy:
         condition: on-failure
+        
   result:
     image: bretfisher/examplevotingapp_result
     ports:

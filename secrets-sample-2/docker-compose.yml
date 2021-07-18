@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   psql:
-    image: postgres
+    image: postgres:13-alpine
     secrets:
       - psql_user
       - psql_password

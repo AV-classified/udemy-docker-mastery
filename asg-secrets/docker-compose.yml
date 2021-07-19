@@ -1,0 +1,43 @@
+version: "3.1"
+
+services: 
+    drupal:
+        image: drupal:8.2
+        ports: 
+            - 80:80
+        deploy:
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 10s
+            restart_policy:
+                condition: on-failure
+
+    db:
+        image: postgres:13-alpine
+        deploy:
+            replicas: 1
+            update_config:
+                parallelism: 1
+                delay: 10s
+            placement:
+                constraints: [node.role == manager]
+            restart_policy:
+                condition: on-failure
+        secrets:
+            - psql_user
+            - psql_pass
+        environment: 
+            POSTGRES_USER_FILE: /run/secrets/psql_user
+            POSTGRES_PASSWORD_FILE: /run/secrets/psql_pass
+        volumes: 
+            - db_data:/var/lib/postgresql/data
+
+volumes: 
+    db_data:
+
+secrets:
+    psql_user:
+        external: true
+    psql_pass:
+        external: true
